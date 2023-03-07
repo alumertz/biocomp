@@ -9,7 +9,6 @@ def newMatrix(dij):
     tam = len(mat)
 
     newName = "(" + names[x]+","+names[y]+ ")"
-    print ("newName " +  newName)
     
     name1 = names[x]
     name2 = names[y]
@@ -20,7 +19,7 @@ def newMatrix(dij):
 
     nDist = np.zeros(len(mat))
     for i in range (len(mat)):
-        nDist[i] = (mat[x][i] +  mat[y][i]-mat[x][y])/2            
+        nDist[i] = (mat[x][i] +  mat[y][i])/2            
 
     nDist = np.delete(nDist,(x,y),0)
 
@@ -36,81 +35,36 @@ def newMatrix(dij):
 
     mat = nMat
 
-# def insert_node(new_label, parent_label, branch_length,tree):
-    
-#     print(tree)
-#     # Traverse the tree to find the position where the new node should be inserted
-#     for i, node in enumerate(tree):
-#         print("aqui")
-#         if isinstance(node, list):
-#             print(node)
-#             # Recursively traverse this subtree
-#             subtree = insert_node(new_label, parent_label, branch_length, node)
-#             print("a2")
-#             if subtree is not None:
-#                 print("a3")
-#                 # If a new subtree was returned, insert it into the current list
-#                 tree[i] = subtree
-#                 return tree
-#         elif node == parent_label:
-#             print("a4")
-#             # Insert the new node as a child of this node
-#             new_node = [new_label, branch_length]
-#             tree[i] = [tree[i], new_node]
-#             return tree
-    
-    
-#     new_node = [new_label, parent_label,branch_length]
-#     print("new node")
-#     print(new_node)
-#     tree.append(new_node)
-#     return tree
-
-#     return None
-
-
 def joinTree(x,y):
     global tree
     findx = tree.find(x)
     findy = tree.find(y)
 
+    print(x, findx, y, findy, tree)
+
     if (findx !=-1 and findy!=-1):
-        tree = tree[0:findx] + "("+ tree[findx:findx+len(x)] + "," + tree[findy:findy+len(y)+ ")"+ tree[findy+len(y):len(tree)]]
+        print("e1")
+        tree = tree.replace(x,"")
+        tree = tree.replace(y,"")
+        tree = tree.replace(",","")
+        if (len(tree)>0):
+            tree = "("+x+","+y+"),"+tree
+        else:
+            tree = "("+x+","+y+")"
     elif(findx !=-1):
-        print("temx" + x)
-        tree =  tree[0:findx] + "("+ tree[findx:findx+len(x)] + "," +y + ")"
+        print("e2")
+        tree =  tree[0:findx] + "("+ tree[findx:findx+len(x)] + "," +y + ")" + tree[findx+len(x):len(tree)]
 
     elif(findy !=-1):
-        print("temy")
+        print("e3")
+        tree =  tree[0:findy] + "("+ tree[findx:findy+len(y)] + "," +x + ")"+ tree[findy+len(x):len(tree)]
+
     elif(len(tree)==0):
+        print("e4")
         tree = "("+ x + ","+ y + ")"
     else:
-        print("n tem nehum")
+        print("e5")
         tree = tree+ "," + "("+ x + ","+ y + ")"
-
-
-
-# def joinTree(x,y):
-	
-# 	esta= 0
-# 	global tree
-# 	for i in tree:
-# 		findx = tree[i].find(x)
-# 		findy = tree[i].find(y)
-# 		if(findx):
-# 			esta= 1
-# 			tree[i] = "("+tree[i]+")"+","+findx
-			
-# 		elif(findy):
-# 			esta= 1
-# 			tree[i] =  "("+tree[i]+")"+","+findy
-#         elif (findx and findy):
-
-		
-			
-
-# 	if(not esta):	
-# 		tree.append(names[x]+","+names[y])
 
 
 def findSmallest(mat):
@@ -121,28 +75,47 @@ def findSmallest(mat):
 			#print(min[0])
 			if (mat[x][y]<min[0] and x!=y):
 				min=[mat[x][y],x,y]
-	print(min)
+	#print(min)
 	return min
 
 
 if __name__ == '__main__':
 	
-    mat = [[0,2,4,6,6,8],[2,0,4,6,6,8],[4,4,0,6,6,8],[6,6,6,0,4,8],[6,6,6,4,0,8],[8,8,8,8,8,0]]
-   
+    #mat = [[0,2,4,6,6,8],[2,0,4,6,6,8],[4,4,0,6,6,8],[6,6,6,0,4,8],[6,6,6,4,0,8],[8,8,8,8,8,0]]
+    #names = ['A','B','C','D','E','F']
+
+    #mat = [[0,7,9,11],[7,8,5,13],[9,5,0,9],[11,13,9,0]]
+    #names = ['A','B','C','D']
+
+    #mat = [[0,3,4,2,7],[3,0,4,6,3],[4,4,0,5,8],[2,6,5,0,6],[7,3,8,6,0]]
+    #names = ['A','B','C','D','E']
+
+    #mat = [[0,20,60,100,90],[20,0,50,90,80],[60,50,0,90,80],[100,90,40,0,30],[90,90,50,30,0]]
+    #names = ['A','B','C','D','E']
+    
+    #mat = [[0,3,4,3],[3,0,4,5],[4,4,0,2],[3,5,2,0]]
+    #names = ['i','j','k','l']
+
+    #mat = [[0,5,9,9,8],[5,0,10,10,9],[9,10,0,8,7],[9,10,8,0,3],[8,9,7,4,0]]
+    #names = ['A','B','C','D','E'] wiki
+
+    # mat = [[0,10,12,8],[10,0,4,6],[12,4,0,2],[8,6,2,0]]
+    # names= ['A','B','C','D']
+
+    mat = [[0,15,22,21,16],[15,0,13,12,7],[22,13,0,5,18],[21,12,5,0,17],[16,7,18,17,0]]
+    names = ['A','B','C','D','E']
+    
     tree =""
-   # print(mat)  
-    names = ['A','B','C','D','E','F']
-    min = findSmallest(mat)
-    print(names[min[1]],names[min[2]])
-    #tree = insert_node(names[min[1]],names[min[2]],min[0],tree)
-    #tree = insert_node("D","E",4,tree)
-    #tree = insert_node("A","C",4,tree)
-    joinTree('A','B')
+    
+    
+
+    while(len(mat)>=2):
+        min = findSmallest(mat)
+        joinTree(names[min[1]],names[min[2]])
+        #print(tree)
+        newMatrix(min)
+        print(tree)
+        print("--------------------------\n\n")
+
     print(tree)
-    joinTree('D','E')
-    print(tree)
-    joinTree("(A,B)",'C')
-    print(tree)
-    joinTree("((A,B),C)",'(D,E)')
-    print(tree)
-    #joinTree(names[min[1]],names[min[2]],0)
+    
