@@ -26,19 +26,59 @@ def needleman_wunsch(seq1,seq2):
                                mat[i-1][j] + gap,
                                mat[i][j-1] + gap)
 
+    print (mat)
     score = mat[lseq1-1][lseq2-1]
+    return score
+
+def nw2(seq1,seq2):
+    lseq1 = len(seq1)
+    lseq2 = len(seq2)
+
+    match = 1
+    mismatch = -1
+    gap = -2
+
+    mat=[]
+    matCheck=[]
+
+    for x in range(lseq1):
+        matCheck.append([])
+        for y in range (lseq2):            
+            if seq1[x] == seq2[y]:
+                matCheck[x].append(match)
+            else:
+                matCheck[x].append(mismatch)
+                
+    for x in range(lseq1+1):
+        mat.append([])
+        for y in range(lseq2+1):
+            if x==0 or y==0:
+                mat[x].append(max(x,y)*gap)
+            else:
+                mat[x].append(0)
+
+
+    for x in range(1,lseq1+1):
+        for y in range(1,lseq2+1):
+            mat[x][y] = max(mat[x-1][y-1]+matCheck[x-1][y-1], mat[x-1][y] +gap, mat[x][y-1]+gap)
+
+    print(mat)
+    score = mat[lseq1][lseq2]
     return score
 
 
 if __name__ == '__main__':
+
     
     seq= []
     for i in range(10):
-        file = open("seq/seq_"+str(i+1)+".fna", "r")
+        print(str(i+1)+".fna")
+        file = open("../seq/seq_"+str(i+1)+".fna", "r")
         seq.append(file.read())
         seq[i]=seq[i][2:]
+        print(str(i),seq[i][0:5])
 
-    print(seq[0][0:5])
+
 
     seq[0] = seq[0][9482:9732]
     seq[1] = seq[1][177903:178153]
@@ -55,17 +95,18 @@ if __name__ == '__main__':
     for i in range (10):
         for j in range(10):
             if (i!=j):
-                score = needleman_wunsch(seq[i],seq[j])
+                score = nw2(seq[i],seq[j])
+                
                 print ("seq_"+str(i+1)+" vs seq_"+str(j+1)+ ": ",score)
 
-    # for i in range (10):
-    #     for j in range(10):
-    #         if (i!=j):
-    #             score = needleman_wunsch(seq[i],seq[j])
-    #             print (score,"\t", end=' ')
-    #         else:
-    #             print("0","\t", end=' ') 
-    #     print("\n")           
+    for i in range (10):
+        for j in range(10):
+            if (i!=j):
+                score = nw2(seq[i],seq[j])
+                print (score,"\t", end=' ')
+            else:
+                print("0","\t", end=' ') 
+        print("\n")           
 
     
     
