@@ -19,8 +19,8 @@ if __name__ == '__main__':
     data = pd.read_csv(file_name, delimiter=',', header=0, index_col=0) 
     #print(data)
     
-    data_type = data['type']
-    data_wo_type = data.drop('type', axis=1)
+    data_type = data['type'] #X
+    data_wo_type = data.drop('type', axis=1) #Y
     classes = data['type'].unique()    
 
     #z-score
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     #print(data)
 
     #split train and test
-    [train,test] = train_test_split(data, test_size=0.3, train_size=0.7, random_state=None, shuffle=False, stratify=None)
+    [train,test] = train_test_split(data, test_size=0.3, train_size=0.7, random_state=42, shuffle=True, stratify=None)
     #print("train and test")
     #print(train.shape)
     #print(test.shape)
@@ -65,6 +65,11 @@ if __name__ == '__main__':
     f1s = f1_score(train_type, prediction, labels=classes, pos_label='normal')
     print('f1s',f1s)
 
+    #kmeans
+
+    kmeans = KMeans(n_clusters=2, random_state=0).fit(data_type)#ou só data? # cria um modelo simples de k-means com 2 clusters, obtido dos dados em X
+    clusters = kmeans.predict(data_type) 
+    print(clusters)
     
     
 
